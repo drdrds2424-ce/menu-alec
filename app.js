@@ -133,11 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-    const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
+      const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
   if (sendWhatsappBtn) {
     sendWhatsappBtn.addEventListener('click', () => {
       if (cart.length === 0) return alert("السلة فارغة!");
       
+      // قراءة رقم الطاولة
+      const tableInput = document.getElementById('tableNumber');
+      const tableNumber = tableInput ? tableInput.value : '';
+
       let msg = "📋 طلب جديد من المنيو:\n\n";
       let total = 0;
       cart.forEach(item => {
@@ -145,7 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
         total += sub;
         msg += `• ${item.name} × ${item.qty} = ${sub.toLocaleString()} د.ع\n`;
       });
+      
       msg += `\n💵 المجموع الكلي: ${total.toLocaleString()} د.ع`;
+
+      // إرفاق رقم الطاولة بالرسالة
+      if (tableNumber) {
+        msg += `\n📍 رقم الطاولة: ${tableNumber}`;
+      } else {
+        msg += `\n📍 رقم الطاولة: لم يحدد`;
+      }
 
       const url = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(msg)}`;
       window.open(url, '_blank');
