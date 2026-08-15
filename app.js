@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
+    const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
   if (sendWhatsappBtn) {
     sendWhatsappBtn.addEventListener('click', () => {
       if (cart.length === 0) return alert("السلة فارغة!");
@@ -151,4 +151,3 @@ document.addEventListener('DOMContentLoaded', () => {
       window.open(url, '_blank');
     });
   }
-});
