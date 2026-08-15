@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <header>
     <h1>📋 منيو المطعم</h1>
     <div class="actions">
-      <button onclick="toggleCart()">🛒 السلة (<span id="cartCount">0</span>)</button>
-      <button onclick="openAdminModal()">⚙️ لوحة التحكم</button>
+      <button type="button" id="cartBtn">🛒 السلة (<span id="cartCount">0</span>)</button>
+      <button type="button" id="adminBtn">⚙️ لوحة التحكم</button>
     </div>
   </header>
 
@@ -19,26 +20,28 @@
     <div id="productsGrid" class="grid"></div>
   </main>
 
+  <!-- نافذة السلة -->
   <div id="cartModal" class="modal hidden">
     <div class="modal-content">
       <h2>🛒 سلة الطلبات</h2>
       <div id="cartItems"></div>
       <div class="cart-total">المجموع: <span id="cartTotal">0</span> د.ع</div>
-      <button class="btn-whatsapp" onclick="sendToWhatsApp()">📱 إرسال الطلب عبر واتساب</button>
-      <button class="btn-close" onclick="toggleCart()">إغلاق</button>
+      <button type="button" class="btn-whatsapp" id="sendWhatsappBtn">📱 إرسال الطلب عبر واتساب</button>
+      <button type="button" class="btn-close" id="closeCartBtn">إغلاق</button>
     </div>
   </div>
 
+  <!-- نافذة إضافة منتج -->
   <div id="adminModal" class="modal hidden">
     <div class="modal-content">
       <h2>⚙️ إضافة وجبة جديدة</h2>
-      <form id="addForm" onsubmit="addProduct(event)">
+      <form id="addForm">
         <input type="text" id="pName" placeholder="اسم الوجبة" required>
         <input type="number" id="pPrice" placeholder="السعر (د.ع)" required>
         <input type="url" id="pImg" placeholder="رابط صورة الوجبة" required>
         <button type="submit" class="btn-save">حفظ الوجبة</button>
       </form>
-      <button class="btn-close" onclick="closeAdminModal()">إغلاق</button>
+      <button type="button" class="btn-close" id="closeAdminBtn">إغلاق</button>
     </div>
   </div>
 
