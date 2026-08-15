@@ -133,12 +133,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-      const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
+  const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
   if (sendWhatsappBtn) {
     sendWhatsappBtn.addEventListener('click', () => {
       if (cart.length === 0) return alert("السلة فارغة!");
       
-      // قراءة رقم الطاولة
       const tableInput = document.getElementById('tableNumber');
       const tableNumber = tableInput ? tableInput.value : '';
 
@@ -152,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       msg += `\n💵 المجموع الكلي: ${total.toLocaleString()} د.ع`;
 
-      // إرفاق رقم الطاولة بالرسالة
       if (tableNumber) {
         msg += `\n📍 رقم الطاولة: ${tableNumber}`;
       } else {
@@ -163,3 +161,4 @@ document.addEventListener('DOMContentLoaded', () => {
       window.open(url, '_blank');
     });
   }
+});
