@@ -15,7 +15,7 @@ function renderProducts() {
       <img src="${p.img}" alt="${p.name}">
       <h3>${p.name}</h3>
       <p>${p.price.toLocaleString()} د.ع</p>
-      <button onclick="addToCart(${p.id})">➕ إضافه للسلة</button>
+      <button onclick="addToCart(${p.id})">➕ إضافة للسلة</button>
     </div>
   `).join('');
 }
@@ -31,9 +31,96 @@ function addToCart(id) {
   updateCartUI();
 }
 
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (item) {
+    item.qty += delta;
+    if (item.qty <= 0) {
+      cart = cart.filter(c => c.id !== id);
+    }
+  }
+  updateCartUI();
+}
+
 function updateCartUI() {
   document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.qty, 0);
   const cartItems = document.getElementById('cartItems');
+  let total = 0;
+  
+  if (cart.length === 0) {
+    cartItems.innerHTML = `<p style="text-align:center; color:#64748b; padding:10px;">السلة فارغة حالياً</p>`;
+  } else {
+    cartItems.innerHTML = cart.map(item => {
+      const subtotal = item.price * item.qty;
+      total += subtotal;
+      return `
+        <div class="cart-item">
+          <div>
+            <strong>${item.name}</strong>
+            <div style="font-size:0.85rem; color:#64748b;">${subtotal.toLocaleString()} د.ع</div>
+          </div>
+          <div class="cart-controls">
+            <button class="btn-qty" onclick="changeQty(${item.id}, -1)">-</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="btn-qty" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  document.getElementById('cartTotal').textContent = total.toLocaleString();
+}
+
+function toggleCart() {
+  document.getElementById('cartModal').classList.toggle('hidden');
+}
+
+function openAdminModal() {
+  const pass = prompt("أدخل كلمة مرور الإدارة:");
+  if (pass === ADMIN_PASS) {
+    document.getElementById('adminModal').classList.remove('hidden');
+  } else if (pass !== null) {
+    alert("كلمة المرور خاطئة!");
+  }
+}
+
+function closeAdminModal() {
+  document.getElementById('adminModal').classList.add('hidden');
+}
+
+function addProduct(e) {
+  e.preventDefault();
+  const name = document.getElementById('pName').value;
+  const price = Number(document.getElementById('pPrice').value);
+  const img = document.getElementById('pImg').value;
+
+  const newProd = { id: Date.now(), name, price, img };
+  products.push(newProd);
+  localStorage.setItem('menu_products', JSON.stringify(products));
+  
+  renderProducts();
+  closeAdminModal();
+  document.getElementById('addForm').reset();
+}
+
+function sendToWhatsApp() {
+  if (cart.length === 0) return alert("السلة فارغة!");
+  
+  let msg = "📋 طلب جديد من المنيو:\n\n";
+  let total = 0;
+  cart.forEach(item => {
+    const sub = item.price * item.qty;
+    total += sub;
+    msg += `• ${item.name} × ${item.qty} = ${sub.toLocaleString()} د.ع\n`;
+  });
+  msg += `\n💵 المجموع الكلي: ${total.toLocaleString()} د.ع`;
+
+  const url = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+renderProducts();
   let total = 0;
   cartItems.innerHTML = cart.map(item => {
     total += item.price * item.qty;
